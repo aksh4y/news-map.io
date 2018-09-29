@@ -4,8 +4,8 @@ const deckgl = new deck.DeckGL({
   longitude: -1.4157,
   latitude: 52.2324,
   zoom: 6,
-  minZoom: 5,
-  maxZoom: 15,
+  minZoom: 3,
+  maxZoom: 25,
   pitch: 40.5
 });
 
@@ -35,6 +35,10 @@ OPTIONS.forEach(key => {
   document.getElementById(key).oninput = renderLayer;
 });
 
+function renderModal(object) {
+  console.log(object);
+}
+
 function renderLayer () {
   const options = {};
   OPTIONS.forEach(key => {
@@ -49,10 +53,12 @@ function renderLayer () {
     data,
     elevationRange: [0, 1000],
     elevationScale: 250,
+    pickable: true,
     extruded: true,
     getPosition: d => d,
     lightSettings: LIGHT_SETTINGS,
     opacity: 1,
+    onClick: (object => renderModal(object)),
     ...options
   });
 
