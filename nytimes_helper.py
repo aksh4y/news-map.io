@@ -23,22 +23,24 @@ def get_article_content(url):
     return ' '.join(content)
 
 
-def get_nytimes_article_dict(df_articles):
+def get_article_dicts(df_articles):
     mask = df_articles['news_source'] == 'the-new-york-times'
     df_nytimes_articles = df_articles.loc[mask]
-    
-    # print(df_nytimes_articles.head()['url'])
-    articles_dict = {}
+    article_content_dicts = []
 
     for url in df_nytimes_articles['url']:
-        articles_dict[url] = get_article_content(url)
+        article_content_dict = {}
+        article_content_dict['url'] = url
+        article_content_dict['content'] = get_article_content(url)
 
-    return articles_dict
+        article_content_dicts.append(article_content_dict)
+
+    return article_content_dicts
 
 
 def main():
     df_articles = pd.read_json('df_articles.json')
-    articles_contents_dict = get_nytimes_article_dict(df_articles)
+    articles_contents_dict = get_article_dicts(df_articles)
     print(articles_contents_dict)
 
 main()
