@@ -15,7 +15,6 @@ def get_sentiment(url):
     features=Features(
       keywords=KeywordsOptions(
         sentiment=True,
-        emotion=True,
         limit=200))).get_result()['keywords']
 
   sentiment = 0
