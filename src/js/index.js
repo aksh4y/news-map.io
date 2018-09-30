@@ -8,7 +8,7 @@ const deckgl = new deck.DeckGL({
   maxZoom: 25,
   pitch: 40.5
 });
-
+ 
 let data = null;
 
 const OPTIONS = ['radius', 'coverage', 'upperPercentile'];
