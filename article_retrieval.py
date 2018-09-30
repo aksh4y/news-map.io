@@ -35,5 +35,5 @@ for source in english_sources_ids:
                                           'news_source': article['source']['id']
                                           }, ignore_index=True)
 
-df_articles.to_json('df_articles.json')
+df_articles.to_json('df_articles.json', orient='records')
 print(len(df_articles))
