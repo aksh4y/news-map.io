@@ -1,10 +1,10 @@
 const deckgl = new deck.DeckGL({
   mapboxApiAccessToken: '',
   mapStyle: 'https://free.tilehosting.com/styles/darkmatter/style.json?key=U0iNgiZKlYdwvgs9UPm1',
-  longitude: -1.4157,
-  latitude: 52.2324,
-  zoom: 6,
-  minZoom: 3,
+  longitude: -30.090875,
+  latitude: 18.587923,
+  zoom: 2,
+  minZoom: 2,
   maxZoom: 25,
   pitch: 40.5
 });
@@ -97,7 +97,7 @@ function renderLayer () {
 }
 
 
-d3.csv('',
+d3.csv('https://raw.githubusercontent.com/jamesw8/news-map.io/master/src/data/articles.csv?token=ARzl-lkZ2-cLQ55oC9AEWO6vfmTrc46Dks5budGiwA%3D%3D',
     (error, response) => {
   data = response.map(d => [Number(d.lng), Number(d.lat)]);
   renderLayer();
