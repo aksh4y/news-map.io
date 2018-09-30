@@ -5,6 +5,7 @@ import json
 from collections import defaultdict
 from werkzeug.contrib.cache import SimpleCache
 from nytimes_helper import get_nytimes_articles_coordinates, get_dict_to_csv
+from datetime import datetime
 
 cache = SimpleCache()
 
@@ -38,11 +39,13 @@ def get_dummy():
 
 @app.route('/getArticles')
 def get_articles():
+	start_time = datetime.now()
 	ret_articles = get_nytimes_articles_coordinates(cache)
 	# Provide support for csv if specified
 	if 'csv' in request.args:
 		ret_articles = get_dict_to_csv(ret_articles)
 		return ret_articles
+	print('Article retrieval took:', (datetime.now()-start_time).total_seconds(), 'seconds')
 	return jsonify(ret_articles)
 
 if __name__ == '__main__':
