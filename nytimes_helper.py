@@ -5,6 +5,7 @@ import pandas as pd
 from location_helper import insert_location_into_articles
 from collections import defaultdict
 import datetime
+from watson import get_sentiment
 
 def retrieve_article_data(begin_date, end_date, pages, key):
     url = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?'
@@ -100,9 +101,11 @@ def get_nytimes_articles_coordinates(cache):
     start_date = start_date.strftime('%Y%m%d')
     end_date = end_date.strftime('%Y%m%d')
     # Get n pages from the past week from NYTimes API
-    df_articles = retrieve_article_data(start_date, end_date, 1, '64421d7edeab4ab9ad0ceea49bfcef03')
+    df_articles = retrieve_article_data(start_date, end_date, 2, '64421d7edeab4ab9ad0ceea49bfcef03')
     articles_contents_list = get_article_dicts(df_articles)
     locations_included_list = insert_location_into_articles(articles_contents_list, cache)
+    for entry in locations_included_list:
+        entry['sentiment'] = get_sentiment(entry.get('url', ''))
     ret = defaultdict(list)
     for article in locations_included_list:
         for location in article['location']:
@@ -112,18 +115,23 @@ def get_nytimes_articles_coordinates(cache):
             ret[str(location.get('coordinates').get('lng'))+','+str(location.get('coordinates').get('lat'))].append({
                     'url': article.get('url', ''),
                     'title': article.get('article', ''),
-                    'pic': pic_link
+                    'pic': pic_link,
+                    'sentiment': article.get('sentiment', 0)
                 })
     return ret
 
 def get_dict_to_csv(json_results):
     articles_coords_dict = json_results
-    csv = 'lng,lat,url,title,pic\n'
+    csv_headers = """lng,lat,url,title,pic,sentiment\n"""
+    csv_body_lines = set()
     for coord in articles_coords_dict:
         for article in articles_coords_dict[coord]:
-            csv += coord
-            csv += ','.join([article.get('url', ''), article.get('article', ''), article.get('url_image', '')]) + '\n'
-    return csv
+            csv_body = coord
+            csv_body += ','
+            csv_body += ','.join([article.get('url', ''), '\"' + article.get('title', '') + '\"', article.get('pic', ''), str(article.get('sentiment', 0.0))])
+            csv_body_lines.add(csv_body)
+            # csv_body += '\n'
+    return csv_headers + '\n'.join(csv_body)
 
 if __name__ == '__main__':
     end_date = datetime.date.today()
