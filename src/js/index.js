@@ -132,7 +132,7 @@ function renderLayer () {
 }
 
 
-d3.csv('https://raw.githubusercontent.com/jamesw8/news-map.io/master/src/data/articles.csv?token=ARzl-lkZ2-cLQ55oC9AEWO6vfmTrc46Dks5budGiwA%3D%3D',
+d3.csv('https://raw.githubusercontent.com/jamesw8/news-map.io/master/src/data/articles.csv?token=AF2Yd4vkKY2jgamj6SJ_l53RXyfaiPS7ks5buhqHwA%3D%3D',
     (error, response) => {
   data = response.map(d => [Number(d.lng), Number(d.lat), String(d.url), String(d.title), String(d.pic), Number(d.sentiment)]);
   renderLayer();
