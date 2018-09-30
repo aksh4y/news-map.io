@@ -12,9 +12,12 @@
         $(document).ready(function() {
             for (var i = 0; i < 10; i++) {
                 $("#articles")
-                    .append('<li><div class="sidebar-item"><div>' +
-                        '<img style="width: 40px; height: 40px; margin-right:10px; padding-top: 10px" src="https://i0.wp.com/seatinginnovations.com/wp-content/uploads/2017/03/instagram-Logo-PNG-Transparent-Background-download.png?ssl=1"/></div>' +
-                        '<div><a href="#" class="sidebar-anchor article_href">Article #'+i+'</a></div></div></li>');
+                    .append('<li><div id="article_'+i+'" class="sidebar-item"><div>' +
+                        '<img style="width: 70px; height: 70px; margin-right:10px; border-radius: 10px" src="https://texasperformingarts.org/sites/files/tpa/tpa_news_images/new-york-times-logo.jpg"/></div>' +
+                        '<div><a target="_blank" href="#" class="sidebar-anchor article_href">Article #'+i+'</a></div></div></li>');
+                if(i%2 === 0) {
+                    $('#article_'+i).css('background-color', '#aa1414');
+                }
             }
         });
     </script>
