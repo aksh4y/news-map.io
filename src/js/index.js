@@ -4,8 +4,8 @@ const deckgl = new deck.DeckGL({
   longitude: -1.4157,
   latitude: 52.2324,
   zoom: 6,
-  minZoom: 5,
-  maxZoom: 15,
+  minZoom: 3,
+  maxZoom: 25,
   pitch: 40.5
 });
  
