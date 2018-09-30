@@ -13,10 +13,10 @@ def retrieve_article_data():
     mask = df_articles['news_source'] == 'the-washington-post'
     df_washingtonpost_articles = df_articles.loc[mask]
 
-    for index, row in df_washingtonpost_articles.iterrows():
+    for index, row in df_washingtonpost_articles.head(20).iterrows():
         df_washingtonpost_articles.at[index, 'content'] = get_article_content(row['url'])
 
-    return df_washingtonpost_articles
+    return df_washingtonpost_articles.head(20)
 
 def get_article_content(url):
     url = url.replace('\\/', '/')
@@ -65,7 +65,7 @@ def get_articles_coordinates(cache):
         for location in article['location']:
             if location == None:
                 continue
-            pic_link = '/'.join(article.get('url', '///').split('/')[:3]) + '/favicon.ico'
+            pic_link = 'https://eig.org/wp-content/uploads/2016/06/washington-post-logo.jpg'
             ret[str(location.get('coordinates').get('lng'))+','+str(location.get('coordinates').get('lat'))].append({
                     'url': article.get('url', ''),
                     'title': article.get('article', ''),

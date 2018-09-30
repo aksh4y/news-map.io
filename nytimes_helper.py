@@ -111,7 +111,7 @@ def get_nytimes_articles_coordinates(cache):
         for location in article['location']:
             if location == None:
                 continue
-            pic_link = '/'.join(article.get('url', '///').split('/')[:3]) + '/favicon.ico'
+            pic_link = 'https://texasperformingarts.org/sites/files/tpa/tpa_news_images/new-york-times-logo.jpg'
             ret[str(location.get('coordinates').get('lng'))+','+str(location.get('coordinates').get('lat'))].append({
                     'url': article.get('url', ''),
                     'title': article.get('article', ''),
