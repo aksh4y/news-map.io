@@ -7,15 +7,20 @@ google_key = environ.get('google_key', '')
 
 GOOGLE_GEOCODE_API = 'https://maps.googleapis.com/maps/api/geocode/json'
 
+count = 0
+total = 0
 def insert_location_into_articles(articles, cache):
 	for article in articles:
 		article['location'] = extract_location_from_text(article['content'], cache)
 	return articles
 
 def extract_location_from_text(content, cache):
+	global count, total
 	entities = set(extract_possible_entities(content))
 	print('Mapping addresses to entities now')
 	print(len(entities), 'entities')
+	count = 0
+	total = len(entities)
 	return list(map(lambda ent: get_address(ent, cache), entities))
 	
 def extract_possible_entities(text):
@@ -37,8 +42,9 @@ def extract_possible_entities(text):
 	return entities
 
 def get_address(entity, cache):
-	global i
+	global count
 	print(entity)
+	print('{}/{}'.format(count, total))
 	if cache.get('entity'):
 		print('Hit!')
 		return cache.get(entity)
@@ -47,6 +53,7 @@ def get_address(entity, cache):
 		'key': google_key
 		})
 	results = address_results.json().get('results', [])
+	count += 1
 	if len(results) > 0:
 		result = {
 			'address': results[0].get('formatted_address', ''),
