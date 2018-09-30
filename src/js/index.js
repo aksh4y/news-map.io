@@ -35,8 +35,37 @@ OPTIONS.forEach(key => {
   document.getElementById(key).oninput = renderLayer;
 });
 
+
+function toggleSidebar(object) {
+  console.log("toggleSideBar", object);
+  $(".button").toggleClass("active");
+  $("main").toggleClass("move-to-left");
+  $(".sidebar-item").toggleClass("active");
+  if ($(".button").hasClass("active")) {
+      $(".sidebar").css('z-index', 3);
+  }
+  else
+      $(".sidebar").css('z-index', 0);
+}
+
+$(document).ready(function() {
+  // $(".button").on("click tap", function () {
+  //     toggleSidebar();
+  // });
+
+  $(document).keyup(function (e) {
+      if (e.keyCode === 27) {
+          toggleSidebar();
+      }
+  });
+});
+
+function clickOpenSidebar() {
+  toggleSidebar();
+}
+
 function renderModal(object) {
-  console.log(object);
+  toggleSidebar(object);
 }
 
 function renderLayer () {
@@ -67,31 +96,9 @@ function renderLayer () {
   });
 }
 
-d3.csv('https://raw.githubusercontent.com/uber-common/deck.gl-data/master/examples/3d-heatmap/heatmap-data.csv',
+
+d3.csv('',
     (error, response) => {
   data = response.map(d => [Number(d.lng), Number(d.lat)]);
   renderLayer();
-});
-
-$(document).ready(function() {
-    function toggleSidebar() {
-        $(".button").toggleClass("active");
-        $("main").toggleClass("move-to-left");
-        $(".sidebar-item").toggleClass("active");
-        if ($(".button").hasClass("active")) {
-            $(".sidebar").css('z-index', 3);
-        }
-        else
-            $(".sidebar").css('z-index', 0);
-    }
-
-    $(".button").on("click tap", function () {
-        toggleSidebar();
-    });
-
-    $(document).keyup(function (e) {
-        if (e.keyCode === 27) {
-            toggleSidebar();
-        }
-    });
 });
