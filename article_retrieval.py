@@ -35,7 +35,7 @@ for source in english_sources_ids:
             truncated_content = article['content'].split('\u2026')[0]
 
         df_articles = df_articles.append({'url': article['url'],
-                                          'url_image': article['url_to_image']
+                                          'url_image': article['urlToImage'],
                                           'article': article['title'],
                                           'datetime': article['publishedAt'],
                                           'news_source': article['source']['id'],
