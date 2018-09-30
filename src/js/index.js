@@ -72,3 +72,26 @@ d3.csv('https://raw.githubusercontent.com/uber-common/deck.gl-data/master/exampl
   data = response.map(d => [Number(d.lng), Number(d.lat)]);
   renderLayer();
 });
+
+$(document).ready(function() {
+    function toggleSidebar() {
+        $(".button").toggleClass("active");
+        $("main").toggleClass("move-to-left");
+        $(".sidebar-item").toggleClass("active");
+        if ($(".button").hasClass("active")) {
+            $(".sidebar").css('z-index', 3);
+        }
+        else
+            $(".sidebar").css('z-index', 0);
+    }
+
+    $(".button").on("click tap", function () {
+        toggleSidebar();
+    });
+
+    $(document).keyup(function (e) {
+        if (e.keyCode === 27) {
+            toggleSidebar();
+        }
+    });
+});
