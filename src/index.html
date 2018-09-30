@@ -6,20 +6,49 @@
     <title>deck.gl HexagonLayer demo</title>
 
     <link rel='stylesheet' href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css'>
-
+    <script src="https://code.jquery.com/jquery-3.0.0.min.js" integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/style.css">
+    <script>
+        $(document).ready(function() {
+            for (var i = 0; i < 10; i++) {
+                $("#articles")
+                    .append('<li><div class="sidebar-item"><div>' +
+                        '<img style="width: 40px; height: 40px; margin-right:10px; padding-top: 10px" src="https://i0.wp.com/seatinginnovations.com/wp-content/uploads/2017/03/instagram-Logo-PNG-Transparent-Background-download.png?ssl=1"/></div>' +
+                        '<div><a href="#" class="sidebar-anchor article_href">Article #'+i+'</a></div></div></li>');
+            }
+        });
+    </script>
 </head>
 
 <body>
+<!-- NAV -->
+<div class="nav-right visible-xs">
+    <div class="button" id="btn">
+        <div class="bar top"></div>
+        <div class="bar middle"></div>
+        <div class="bar bottom"></div>
+    </div>
+</div>
+<main>
+    <nav>
+        <div class="nav-right hidden-xs">
+            <div class="button" id="btn">
+                <div class="bar top"></div>
+                <div class="bar middle"></div>
+                <div class="bar bottom"></div>
+            </div>
+        </div>
+    </nav>
+</main>
     <div id="control-panel">
         <div>
             <label>Radius</label>
-            <input id="radius" type="range" min="1000" max="20000" step="1000" value="1000"></input>
+            <input id="radius" type="range" min="1000" max="20000" step="1000" value="9000"></input>
             <span id="radius-value"></span>
         </div>
         <div>
             <label>Coverage</label>
-            <input id="coverage" type="range" min="0" max="1" step="0.1" value="1"></input>
+            <input id="coverage" type="range" min="0" max="1" step="0.1" value="0.8"></input>
             <span id="coverage-value"></span>
         </div>
         <div>
@@ -28,9 +57,14 @@
             <span id="upperPercentile-value"></span>
         </div>
     </div>
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
-    <script src='https://unpkg.com/deck.gl@~5.2.0/deckgl.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js'></script>
-    <script  src="js/index.js"></script>
+
+<div class="sidebar">
+    <ul id="articles" class="sidebar-list"></ul>
+</div>
+<!-- End of NAV -->
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
+<script src='https://unpkg.com/deck.gl@~5.2.0/deckgl.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js'></script>
+<script src="js/index.js"></script>
 </body>
 </html>
