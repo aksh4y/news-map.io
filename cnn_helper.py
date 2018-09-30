@@ -13,10 +13,10 @@ def retrieve_article_data():
     mask = df_articles['news_source'] == 'cnn'
     df_cnn_articles = df_articles.loc[mask]
 
-    for index, row in df_cnn_articles.iterrows():
+    for index, row in df_cnn_articles.head(20).iterrows():
         df_cnn_articles.at[index, 'content'] = get_article_content(row['url'])
 
-    return df_cnn_articles
+    return df_cnn_articles.head(20)
 
 def get_article_content(url):
     url = url.replace('\\/', '/')
@@ -67,7 +67,7 @@ def get_articles_coordinates(cache):
         for location in article['location']:
             if location == None:
                 continue
-            pic_link = '/'.join(article.get('url', '///').split('/')[:3]) + '/favicon.ico'
+            pic_link = 'https://assets.fontsinuse.com/static/use-media-items/28/27012/full-1400x1400/5670256f/cnn-logo-square.png?resolution=0'
             ret[str(location.get('coordinates').get('lng'))+','+str(location.get('coordinates').get('lat'))].append({
                     'url': article.get('url', ''),
                     'title': article.get('article', ''),
