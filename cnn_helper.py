@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
-
+import re
 
 def get_article_content(url):
     url = url.replace('\\/', '/')
@@ -20,7 +20,8 @@ def get_article_content(url):
     content = []
 
     for piece in content_pieces:
-        content.append(piece.text)
+        cleaned_content = re.sub('[^0-9a-zA-Z]+', ' ', piece.text).strip()
+        content.append(cleaned_content)
 
     return ' '.join(content)
 
