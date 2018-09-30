@@ -37,7 +37,8 @@ OPTIONS.forEach(key => {
 
 
 function toggleSidebar(object) {
-  console.log("toggleSideBar", object);
+  /*console.log("toggleSideBar", object);*/
+  populateArticles(object);
   $(".button").toggleClass("active");
   $("main").toggleClass("move-to-left");
   $(".sidebar-item").toggleClass("active");
@@ -66,6 +67,37 @@ function clickOpenSidebar() {
 
 function renderModal(object) {
   toggleSidebar(object);
+}
+
+function populateArticles(object) {
+    if(object == null)
+        return;
+    $("#articles").empty();
+    var coords = new Set();
+    var unique = new Set();
+    for(var e in object.object.points) {
+        var obj = {
+            url: object.object.points[e][2],
+            title: object.object.points[e][3],
+            pic: object.object.points[e][4]
+        };
+        if(!unique.has(obj.url)) {
+            coords.add(obj);
+            unique.add(obj.url);
+        }
+    }
+    coords = Array.from(coords);
+    for(var c in coords) {
+        if(coords[c].title == null)
+            continue;
+        $("#articles")
+            .append('<li><div id="article_'+c+'" class="sidebar-item"><div>' +
+                '<img style="width: 70px; height: 70px; margin-right:10px; border-radius: 10px" src='+coords[c].pic+'/></div>' +
+                '<div><a target="_blank" href="'+coords[c].url+'" class="sidebar-anchor article_href">'+coords[c].title+'</a></div></div></li>');
+        if(c%2 === 0) {
+            $('#article_'+c).css('background-color', '#aa1414');
+        }
+    }
 }
 
 function renderLayer () {
@@ -99,6 +131,6 @@ function renderLayer () {
 
 d3.csv('https://raw.githubusercontent.com/jamesw8/news-map.io/master/src/data/articles.csv?token=ARzl-lkZ2-cLQ55oC9AEWO6vfmTrc46Dks5budGiwA%3D%3D',
     (error, response) => {
-  data = response.map(d => [Number(d.lng), Number(d.lat)]);
+  data = response.map(d => [Number(d.lng), Number(d.lat), String(d.url), String(d.title), String(d.pic)]);
   renderLayer();
 });

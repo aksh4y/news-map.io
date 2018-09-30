@@ -8,19 +8,6 @@
     <link rel='stylesheet' href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css'>
     <script src="https://code.jquery.com/jquery-3.0.0.min.js" integrity="sha256-JmvOoLtYsmqlsWxa7mDSLMwa6dZ9rrIdtrrVYRnDRH0=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/style.css">
-    <script>
-        $(document).ready(function() {
-            for (var i = 0; i < 10; i++) {
-                $("#articles")
-                    .append('<li><div id="article_'+i+'" class="sidebar-item"><div>' +
-                        '<img style="width: 70px; height: 70px; margin-right:10px; border-radius: 10px" src="https://texasperformingarts.org/sites/files/tpa/tpa_news_images/new-york-times-logo.jpg"/></div>' +
-                        '<div><a target="_blank" href="#" class="sidebar-anchor article_href">Article #'+i+'</a></div></div></li>');
-                if(i%2 === 0) {
-                    $('#article_'+i).css('background-color', '#aa1414');
-                }
-            }
-        });
-    </script>
 </head>
 
 <body>
