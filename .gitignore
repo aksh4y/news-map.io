@@ -178,3 +178,6 @@ typings/
 
 # Serverless directories
 .serverless
+
+# Webstorm idea dir
+.idea/
