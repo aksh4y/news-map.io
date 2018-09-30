@@ -7,9 +7,16 @@ google_key = environ.get('google_key', '')
 
 GOOGLE_GEOCODE_API = 'https://maps.googleapis.com/maps/api/geocode/json'
 
-def extract_location_from_text(content):
-	entities = extract_possible_entities(content)
-	return list(map(get_address, entities))
+def insert_location_into_articles(articles, cache):
+	for article in articles:
+		article['location'] = extract_location_from_text(article['content'], cache)
+	return articles
+
+def extract_location_from_text(content, cache):
+	entities = set(extract_possible_entities(content))
+	print('Mapping addresses to entities now')
+	print(len(entities), 'entities')
+	return list(map(lambda ent: get_address(ent, cache), entities))
 	
 def extract_possible_entities(text):
 	stop_words = set(stopwords.words('english'))
@@ -19,7 +26,7 @@ def extract_possible_entities(text):
 	current = ''
 	entities = []
 	for word in word_tokens:
-		print('Doing word', word)
+		print('Evaluating word', word)
 		if word.lower() not in stop_words:
 			if word.isupper() or word.istitle():
 				current += bool(current)*' ' + word
@@ -29,17 +36,24 @@ def extract_possible_entities(text):
 			current = ''
 	return entities
 
-def get_address(entity):
+def get_address(entity, cache):
+	global i
+	print(entity)
+	if cache.get('entity'):
+		print('Hit!')
+		return cache.get(entity)
 	address_results = requests.get(GOOGLE_GEOCODE_API, params={
 		'address': entity,
 		'key': google_key
 		})
 	results = address_results.json().get('results', [])
 	if len(results) > 0:
-		return {
-		'address': results[0].get('formatted_address', ''),
-		'coordinates': results[0].get('geometry', {}).get('location', {})
+		result = {
+			'address': results[0].get('formatted_address', ''),
+			'coordinates': results[0].get('geometry', {}).get('location', {})
 		}
+		cache.set(entity, result)
+		return result
 	else:
 		return None
 
