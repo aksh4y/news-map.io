@@ -4,8 +4,12 @@ from os import environ
 import json
 from collections import defaultdict
 from werkzeug.contrib.cache import SimpleCache
-from nytimes_helper import get_nytimes_articles_coordinates, get_dict_to_csv
+import nytimes_helper as nyt
+import cnn_helper as cnn
+import washingtonpost_helper as wapo
+import foxnews_helper as fox
 from datetime import datetime
+import csv
 
 cache = SimpleCache()
 
@@ -40,12 +44,39 @@ def get_dummy():
 @app.route('/getArticles')
 def get_articles():
 	start_time = datetime.now()
-	ret_articles = get_nytimes_articles_coordinates(cache)
+	nytimes_articles = nyt.get_articles_coordinates(cache)
+	cnn_articles = cnn.get_articles_coordinates(cache)
+	fox_articles = fox.get_articles_coordinates(cache)
+	wapo_articles = wapo.get_articles_coordinates(cache)
+
+	ret_articles = nytimes_articles
+	for key in cnn_articles:
+		ret_articles.setdefault(key, []).extend(cnn_articles[key])
+
+	for key in fox_articles:
+		ret_articles.setdefault(key, []).extend(fox_articles[key])
+	
+	for key in wapo_articles:
+		ret_articles.setdefault(key, []).extend(wapo_articles[key])
+
+	with open('ret_articles.json', 'w') as jsonf:
+		json.dump(ret_articles, jsonf)
+
 	# Provide support for csv if specified
 	if 'csv' in request.args:
-		ret_articles = get_dict_to_csv(ret_articles)
-		return ret_articles
-	print('Article retrieval took:', (datetime.now()-start_time).total_seconds(), 'seconds')
+		csv_headers = """lng,lat,url,title,pic,sentiment\n"""
+		nytimes_articles = nyt.get_dict_to_csv(nytimes_articles)
+		cnn_articles = cnn.get_dict_to_csv(cnn_articles)
+		fox_articles = fox.get_dict_to_csv(fox_articles)
+		wapo_articles = wapo.get_dict_to_csv(wapo_articles)
+		print('Article retrieval took:', (datetime.now()-start_time).total_seconds(), 'seconds')
+		with open('articles.csv', 'w', newline='\n') as csvf:
+			csvf.write(csv_headers)
+			csvf.write(nytimes_articles)
+			csvf.write(cnn_articles)
+			csvf.write(fox_articles)
+			csvf.write(wapo_articles)
+		return csv_headers + '\n'.join([nytimes_articles, cnn_articles, fox_articles, wapo_articles])
 	return jsonify(ret_articles)
 
 if __name__ == '__main__':

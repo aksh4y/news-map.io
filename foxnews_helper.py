@@ -13,10 +13,10 @@ def retrieve_article_data():
     mask = df_articles['news_source'] == 'fox-news'
     df_foxnews_articles = df_articles.loc[mask]
 
-    for index, row in df_foxnews_articles.head(20).iterrows():
+    for index, row in df_foxnews_articles.head(10).iterrows():
         df_foxnews_articles.at[index, 'content'] = get_article_content(row['url'])
 
-    return df_foxnews_articles.head(20)
+    return df_foxnews_articles.head(10)
 
 def get_article_content(url):
     url = url.replace('\\/', '/')
@@ -74,13 +74,17 @@ def get_articles_coordinates(cache):
     return ret
 
 def get_dict_to_csv(json_results):
+    # df = pd.read_json('')
     articles_coords_dict = json_results
-    csv = 'lng,lat,url,title,pic\n'
+    csv_body_lines = set()
     for coord in articles_coords_dict:
         for article in articles_coords_dict[coord]:
-            csv += coord
-            csv += ','.join([article.get('url', ''), article.get('article', ''), article.get('url_image', '')]) + '\n'
-    return csv
+            csv_body = coord
+            csv_body += ','
+            csv_body += ','.join([article.get('url', ''), '\"' + article.get('title', '') + '\"', article.get('pic', ''), str(article.get('sentiment', 0.0))])
+            csv_body_lines.add(csv_body)
+            # csv_body += '\n'
+    return '\n'.join(csv_body_lines)
 
 if __name__ == "__main__":
     end_date = datetime.date.today()

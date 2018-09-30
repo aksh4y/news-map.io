@@ -94,18 +94,19 @@ def get_article_dicts(df_articles):
 
     return article_content_dicts
 
-def get_nytimes_articles_coordinates(cache):
+def get_articles_coordinates(cache):
     from pprint import pprint
     end_date = datetime.date.today()
     start_date = end_date - datetime.timedelta(days=7)
     start_date = start_date.strftime('%Y%m%d')
     end_date = end_date.strftime('%Y%m%d')
     # Get n pages from the past week from NYTimes API
-    df_articles = retrieve_article_data(start_date, end_date, 2, '64421d7edeab4ab9ad0ceea49bfcef03')
+    df_articles = retrieve_article_data(start_date, end_date, 1, '64421d7edeab4ab9ad0ceea49bfcef03')
     articles_contents_list = get_article_dicts(df_articles)
     locations_included_list = insert_location_into_articles(articles_contents_list, cache)
     for entry in locations_included_list:
         entry['sentiment'] = get_sentiment(entry.get('url', ''))
+        print(entry.get('sentiment', 0))
     ret = defaultdict(list)
     for article in locations_included_list:
         for location in article['location']:
@@ -121,8 +122,8 @@ def get_nytimes_articles_coordinates(cache):
     return ret
 
 def get_dict_to_csv(json_results):
+    # df = pd.read_json('')
     articles_coords_dict = json_results
-    csv_headers = """lng,lat,url,title,pic,sentiment\n"""
     csv_body_lines = set()
     for coord in articles_coords_dict:
         for article in articles_coords_dict[coord]:
@@ -131,7 +132,7 @@ def get_dict_to_csv(json_results):
             csv_body += ','.join([article.get('url', ''), '\"' + article.get('title', '') + '\"', article.get('pic', ''), str(article.get('sentiment', 0.0))])
             csv_body_lines.add(csv_body)
             # csv_body += '\n'
-    return csv_headers + '\n'.join(csv_body)
+    return '\n'.join(csv_body_lines)
 
 if __name__ == '__main__':
     end_date = datetime.date.today()
