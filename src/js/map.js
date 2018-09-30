@@ -37,7 +37,6 @@ OPTIONS.forEach(key => {
 
 
 function toggleSidebar(object) {
-  /*console.log("toggleSideBar", object);*/
   populateArticles(object);
   $(".button").toggleClass("active");
   $("main").toggleClass("move-to-left");
@@ -92,7 +91,6 @@ function populateArticles(object) {
     for(var c in coords) {
         if(coords[c].title == null)
             continue;
-        console.log(coords[c].sentiment);
         $("#articles")
             .append('<li><div id="article_'+c+'" class="sidebar-item"><div>' +
                 '<img style="width: 70px; height: 70px; margin-right:10px; border-radius: 10px" src='+coords[c].pic+'></div>' +
